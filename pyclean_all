@@ -1,0 +1,6 @@
+#!/bin/bash
+# Recursively clean out all .pyc files
+
+echo -e "Cleaning up all .pyc files recursively from $1..."
+find $1 -name "*.pyc" | xargs rm
+echo "    ...Done"

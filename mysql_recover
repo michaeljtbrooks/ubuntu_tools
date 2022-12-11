@@ -1,0 +1,32 @@
+#!/bin/bash
+# Recover a BORKED MySQL instance - run as sudo
+
+echo "Recovering børked MySQL / MariaDB..."
+
+# Enforce sudo
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+# Stop any existing service
+service mysql stop
+
+# Swap the recovery instance with the non-recovery
+mv /etc/mysql/mariadb.cnf /etc/mysql/mariadb.cnf.NORMAL
+mv /etc/mysql/mariadb_innodb_recovery.cnf /etc/mysql/mariadb.cnf
+
+# Startup in recovery mode, once recovered stop again
+service mysql start
+service mysql stop
+
+# Undo file swapping
+mv /etc/mysql/mariadb.cnf /etc/mysql/mariadb_innodb_recovery.cnf
+mv /etc/mysql/mariadb.cnf.NORMAL /etc/mysql/mariadb.cnf
+
+# Startup in normal mode
+service mysql start
+
+echo "...recovered. Fucking hell."
+
+

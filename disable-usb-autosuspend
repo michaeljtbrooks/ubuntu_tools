@@ -1,0 +1,3 @@
+#!/bin/bash
+# Turns off USB power saving. Hopefully devices won't wilfilly disconnect for no reason
+echo on | sudo tee /sys/bus/usb/devices/*/power/level >/dev/null
